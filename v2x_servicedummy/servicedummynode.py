@@ -9,11 +9,14 @@ class ServiceDummyNode(Node):
         super().__init__('ServiceDummyNode')
         self.srv = self.create_service(TrafficLightInfo, 'TrafficLightInfo', self.TrafficLightInfoCallback)
         self.srv2 = self.create_service(WarningInfoDisplay, 'WarningInfoDisplay', self.WarningInfoDisplayCallback)
+        self.reqcounter = 0
 
     def TrafficLightInfoCallback(self, request, response):
         # To trigger callback, run '''ros2 service call /TrafficLightInfo v2x_services/srv/TrafficLightInfo'''
-        self.get_logger().info('received Request')
+        self.get_logger().info(f'received Request {self.reqcounter}')
+        self.reqcounter += 1
 
+        response.movementphasestate = 'stop-And-Remain'
         return response
     
     def WarningInfoDisplayCallback(self, request, response):
